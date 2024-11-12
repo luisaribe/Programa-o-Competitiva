@@ -1,0 +1,77 @@
+#include <stdio.h>
+#define MAX 10000
+
+  struct Produto{
+    int marca;
+    int lucro;
+  };
+
+typedef struct Produto produto;
+
+void Zerar(int p, produto info[MAX]){
+  for(int i=0; i<p+1; i++){
+    info[i].marca = 0;
+    info[i].lucro =0;
+  }
+}
+
+  int Procurar (int marca, int p, produto info[MAX]){
+    for(int i=0; i<p+1; i++){
+      if(info[i].marca == marca){
+        return p;
+      }
+    }
+    return -1;
+  }
+
+  void Verificar(int p, produto info[MAX]){
+    int aux;
+    for(int i=0; i<p+1; i++){
+      for(int j=i+1; j<p+1; j++){
+        if(info[i].lucro < info[j].lucro){
+          aux = info[i].lucro;
+          info[i].lucro = info[j].lucro;
+          info[j].lucro = aux;
+        }
+      }
+    }
+  }
+
+int main(void) {
+
+  int n, prateleiras, garrafas, marca, custo, p=0, total=0;
+  produto info[MAX];
+
+  scanf("%d", &n);
+  
+  while (n>0){
+    scanf("%d %d", &prateleiras, &garrafas);
+    for(int i=0; i<garrafas; i++){
+      scanf("%d %d", &marca, &custo);
+        total+=custo;
+        int a = Procurar(marca, p, info);
+      if (a!= -1){
+        info[a].lucro++;
+      }else{
+        info[p].marca = marca;
+        info[p].lucro = custo;
+        p++;
+      }
+
+      if(p-1>prateleiras){
+        Verificar(p-1, info);
+        total=0;
+        for(int i=0; i<prateleiras; i++){
+          total+=info[i].lucro;
+        }
+      }
+      if(i == garrafas-1)
+      printf("%d\n", total);
+    }
+
+    total=0;
+    Zerar(p, info);
+    n--;
+  }
+  return 0;
+}
